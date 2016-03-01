@@ -1,7 +1,8 @@
 /**
  * Created by Son on 2/28/2016.
  */
-// Constructor
+
+// constructor
 var Card = function(suit, number) {
 
     // name of each svg images.
@@ -141,6 +142,7 @@ var Card = function(suit, number) {
     };
 };
 
+// constructor
 var Deck = function() {
     // Make Almost all data private to make it harder to change data once a Deck is created.
     var deck = [];
@@ -148,6 +150,7 @@ var Deck = function() {
     // Make 52 new cards and pushes them into a list
     // returns a list of objects.
     var newDeck = function() {
+        // Calculation by using modulus. One calculates the suit 1-4, and card number 1-13. 4 x 13 = 52
         for (var i = 0; i < 52; i++) {
             var suit = i % 4 + 1;
             var number = i % 13 + 1;
@@ -243,66 +246,117 @@ var Hand = function(deck) {
         }
         return string;
     };
+
 };
-//
-//var d = new Deck();
-//d.shuffle(20);
-//var hand = new Hand(d);
-//console.log(hand.getHand())
-//console.log(hand.normalScore(), hand.aceScore());jwedendnvc vvnfvmvfmvvf ,v
 
 var player, dealer;
 var deck = new Deck();
 deck.shuffle(9);
 
+// Need to add the logic when there is an ACE
 function Test() {
 
-    //var person = prompt("Enter something fool");
     player = new Hand(deck);
     dealer = new Hand(deck);
 
-    //console.log(person);
-    console.log(deck.getDeck().length);
-    console.log(player.normalScore(), player.readCard());
-    console.log(dealer.normalScore(), dealer.readCard());
-
-    //var person = prompt("Enter something fool");
-    //
-    //if( person == "yes" || person.indexOf("Yes") > -1 ){
-    //    player = new Hand(deck);
-    //    dealer = new Hand(deck);
-    //}
-
     var t = true;
-    while (t == true) {
+    var f = true;
+
+    // Private Function
+    // This function check if the first two cards of the initial hand have a black Jack
+    // returns (boolean)
+    var checkBlackJack = function(_player){
+        var exist = false;
+        var royal = ["King", "Queen", "Jack"];
+        for(var i = 0; i < royal.length; i++) {
+            if(_player.getHand()[0].symbol == "Ace" && _player.getHand()[1].symbol === royal[i]){
+                exist = true;
+            }
+            else if( _player.getHand()[1].symbol == "Ace" && _player.getHand()[0].symbol === royal[i]) {
+                exist = true;
+            }
+        }
+        return exist;
+    }
+
+    console.log(deck.getDeck().length);
+    console.log(player.normalScore(), player.aceScore(), player.readCard());
+    console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
+    while (t == true){
+
+        if (player.normalScore() == 21 && checkBlackJack(player) ){
+            console.log("BlackJack");
+            t = false;
+            return;
+        }
+
         var c = prompt("Enter something fool");
-        if (c == "yes") {
+
+        if (c == "yes" || c == "y") {
+
             player.hit();
-        } else {
+            if (player.normalScore() > 21 && player.aceScore() > 21) {
+
+                console.log(deck.getDeck().length);
+                console.log(player.normalScore(), player.aceScore(), player.readCard());
+                console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
+                console.log("You lose");
+                t = false
+            }
+            console.log(deck.getDeck().length);
+            console.log(player.normalScore(), player.aceScore(), player.readCard());
+            console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
+
+        }
+        else if (c == "stand" ) {
+
+            if (dealer.normalScore() == 21 && checkBlackJack(dealer) ){
+                console.log("BlackJack for dealer");
+                t = false;
+                return;
+            }
+            while (c == "stand") {
+
+                if(dealer.normalScore() > 21 || dealer.aceScore() > 21){
+                    console.log("Dealer Lose");
+                    c = "stop";
+                    t = false;
+                }
+
+                if (dealer.normalScore() < 17 && dealer.aceScore() < 17) {
+                    dealer.hit();
+                    console.log(deck.getDeck().length);
+                    console.log(player.normalScore(), player.aceScore(), player.readCard());
+                    console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
+                    t = false
+
+                    if(dealer.normalScore() > 21){
+                        console.log("Dealer Lose");
+                        c = "stop";
+                        t = false;
+                    }
+                }
+                else {
+                    console.log("Dealer stay");
+                    c = "stop";
+                    t = false;
+                    if(dealer.normalScore() < player.normalScore()){
+                        console.log("Dealer lose");
+                    }
+                    else if(dealer.aceScore() < player.aceScore()){
+                        console.log("Dealer lose");
+                    }
+                    else if(dealer.aceScore() === player.aceScore() || dealer.aceScore() === player.aceScore()){
+                        console.log("Tie !!!");
+                    }
+                    else{
+                    }
+                }
+            }
+        }
+        else {
             t = false;
         }
-
-        if (player.normalScore() > 21) {
-            console.log("You lose");
-            console.log(deck.getDeck().length);
-            console.log(player.normalScore(), player.readCard());
-            console.log(dealer.normalScore(), dealer.readCard());
-            t = false
-        } else {
-            console.log(deck.getDeck().length);
-            console.log(player.normalScore(), player.readCard());
-            console.log(dealer.normalScore(), dealer.readCard());
-        }
-
     }
-    //console.log(deck.getDeck().length);
-    //console.log( player.normalScore(), player.readCard());
-    //console.log( dealer.normalScore(), dealer.readCard());
-
-    //
-    //var deck = new Deck()
-    //var t = deck.getDeck();
-    //for(var i = 0;  i < t .length; i++){
-    //    console.log(t[i].symbol, t[i].suit);
-    //}
 }
+
