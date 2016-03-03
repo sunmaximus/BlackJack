@@ -257,7 +257,7 @@ var deck = new Deck(3);
 deck.shuffle(9);
 
 // Need to add the logic when there is an ACE
-function Test() {
+function Game() {
 
     player = new Hand(deck);
     dealer = new Hand(deck);
@@ -316,17 +316,6 @@ function Test() {
                 t = false
             }
 
-            //if(player.normalScore() > player.aceScore() && player.normalScore() < 22){
-            //    player_score = player.normalScore();
-            //    console.log("1");
-            //}else if(player.normalScore() > 21 && player.aceScore() < 22){
-            //    player_score = player.aceScore();
-            //    console.log("2");
-            //}else if(player.normalScore() > 21){
-            //    player_score = player.aceScore();
-            //    console.log("3");
-            //}
-
             console.log(deck.getDeck().length);
             console.log(player.normalScore(), player.aceScore(), player.readCard());
             console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
@@ -337,10 +326,12 @@ function Test() {
             if(player.normalScore() > player.aceScore() && player.normalScore() < 22){
                 player_score = player.normalScore();
                 console.log("1");
-            }else if(player.normalScore() > 21 && player.aceScore() < 22){
+            }
+            else if(player.normalScore() > 21 && player.aceScore() < 22){
                 player_score = player.aceScore();
                 console.log("2");
-            }else if(player.normalScore() > 21){
+            }
+            else if(player.normalScore() > 21){
                 player_score = player.aceScore();
                 console.log("3");
             }
@@ -395,8 +386,6 @@ function Test() {
 
             }
 
-            //27 17 "8_of_club --&&--8_of_diamond --&&--Ace_of_heart --&&--"
-            //19 9 "8_of_heart --&&--Ace_of_diamond --&&--"
 
             if(dealer.normalScore() > player_score && dealer.normalScore() < 22){
                 console.log("00. Dealer stay. Dealer win.");
