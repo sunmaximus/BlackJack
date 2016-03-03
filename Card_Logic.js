@@ -360,9 +360,10 @@ function Test() {
                     console.log("0. Dealer win");
                     return;
                 }
-                // else if they are the same score.
-
-
+                else if(dealer.normalScore() == player.aceScore()){
+                    console.log("1. Dealer and Player have the same score");
+                    return;
+                }
 
                 return;
             }
@@ -394,7 +395,16 @@ function Test() {
 
             }
 
-            if(dealer.normalScore() > 21 && dealer.aceScore() < 17 || dealer.aceScore() < player.aceScore() && player.normalScore() > dealer.normalScore() && dealer.aceScore() < 17) {
+            //27 17 "8_of_club --&&--8_of_diamond --&&--Ace_of_heart --&&--"
+            //19 9 "8_of_heart --&&--Ace_of_diamond --&&--"
+
+            if(dealer.normalScore() > player_score && dealer.normalScore() < 22){
+                console.log("00. Dealer stay. Dealer win.");
+                c = "stop";
+                t =false;
+                return;
+            }
+            else if(dealer.normalScore() > 21 && dealer.aceScore() < 17) {
                 while (dealer.aceScore() < player.aceScore() && dealer.aceScore() < 17) {
                     dealer.hit();
                     console.log("Hitting on Ace");
@@ -426,8 +436,6 @@ function Test() {
                 return;
             }
 
-
-
             if(dealer_score > player_score && dealer_score < 22) {
                 console.log("dealer win");
                 c = "stop";
@@ -435,7 +443,7 @@ function Test() {
                 return
             }
             else if(player_score < dealer_score && dealer > 22) {
-                console.log("dealer win because dealer is over 21 ");
+                console.log("dealer lose because dealer is over 21 ");
                 c = "stop";
                 t = false;
                 return
@@ -452,10 +460,7 @@ function Test() {
                 t = false;
                 return
             }
-
             // Check if the dealer win or lose
-
-
         }
         else {
             t = false;
