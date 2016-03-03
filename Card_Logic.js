@@ -1,5 +1,8 @@
 /**
- * Created by Son on 2/28/2016.
+ * Created by Son Nguyen on 2/28/2016.
+ * Description: This script is an Alpha version  to create Card and Deck object. The Game function is the logic of the
+ *              game.
+ *              
  */
 
 // constructor
@@ -257,13 +260,12 @@ var deck = new Deck(3);
 deck.shuffle(9);
 
 // Need to add the logic when there is an ACE
-function Test() {
+function Game() {
 
     player = new Hand(deck);
     dealer = new Hand(deck);
 
     var t = true;
-    var f = true;
     var player_score = 0;
     var dealer_score = 0;
 
@@ -289,12 +291,15 @@ function Test() {
     console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
     while (t == true){
 
+
+        // Check if player initial hand is BlackJack. Stop.
         if (player.normalScore() == 21 && checkBlackJack(player) ){
             console.log("BlackJack");
             t = false;
             return;
         }
 
+        // Check if player win by having 5 cards and never bust.
         if(player.getHand().length == 5 && player.normalScore() < 22 || player.getHand().length == 5 && player.aceScore() < 22){
             console.log("You Win, 5 cards");
             t = false;
@@ -303,10 +308,14 @@ function Test() {
 
         var c = prompt("Enter something fool");
 
+        // Assign a default value for player_score on the initial score if player never hit.
         player_score = player.normalScore();
+
         if (c == "yes" || c == "y") {
 
             player.hit();
+
+            // After player hit. Check if the player bust.
             if (player.normalScore() > 21 && player.aceScore() > 21) {
 
                 console.log(deck.getDeck().length);
@@ -316,75 +325,79 @@ function Test() {
                 t = false
             }
 
-            //if(player.normalScore() > player.aceScore() && player.normalScore() < 22){
-            //    player_score = player.normalScore();
-            //    console.log("1");
-            //}else if(player.normalScore() > 21 && player.aceScore() < 22){
-            //    player_score = player.aceScore();
-            //    console.log("2");
-            //}else if(player.normalScore() > 21){
-            //    player_score = player.aceScore();
-            //    console.log("3");
-            //}
-
             console.log(deck.getDeck().length);
             console.log(player.normalScore(), player.aceScore(), player.readCard());
             console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
         }
 
+        // Dealer Turn.
         else if (c == "stand" ) {
 
+            // Update the best score for player_score.
             if(player.normalScore() > player.aceScore() && player.normalScore() < 22){
                 player_score = player.normalScore();
                 console.log("1");
-            }else if(player.normalScore() > 21 && player.aceScore() < 22){
+            }
+            else if(player.normalScore() > 21 && player.aceScore() < 22){
                 player_score = player.aceScore();
                 console.log("2");
-            }else if(player.normalScore() > 21){
+            }
+            else if(player.normalScore() > 21){
                 player_score = player.aceScore();
                 console.log("3");
             }
 
+            // set an initial value for dealer score;
             dealer_score = dealer.normalScore()
+
             // Check if the dealer should stay at the initial hand.
             if (dealer.normalScore() == 21 && checkBlackJack(dealer) ){
                 console.log("BlackJack for dealer");
                 t = false;
                 return;
             }
+
+            // If dealer score is 21 at start.
             if(dealer.normalScore() == 21){
                 t = false;
                 console.log("Dealer Stay because it is 21");
 
+                // If dealer score without ace is bigger than player OR bigger than player with an ace.
+                // Then exit and dealer win.
                 if(dealer.normalScore() > player.normalScore() || dealer.normalScore() > player.aceScore()){
                     console.log("0. Dealer win");
                     return;
                 }
-                // else if they are the same score.
-
-
-
+                // If both are equal then it is a tie. House still win automatically.
+                else if(dealer.normalScore() == player.aceScore()){
+                    console.log("1. Dealer and Player have the same score");
+                    return;
+                }
                 return;
             }
 
+            // Check if dealer and player score are the same. Stay because House will win.
             if(dealer.normalScore() == player.normalScore() && dealer.normalScore() > 17){
                 console.log("Dealer Stay because it is tie");
                 return;
             }
+            // Stay if Dealer's score without an ace is bigger than Player's score and haven't busted yet.
             else if(dealer.normalScore() > player.normalScore() && dealer.normalScore() < 22){
                 console.log("Dealer Stay because dealer score is higher than player");
                 return;
             }
 
-            // Check if the dealer should hit or not
+            // Check if the dealer should hit or not while not having an Ace.
             while (dealer.normalScore() < player.normalScore() && dealer.normalScore() < 17){
                 dealer.hit();
                 console.log("Hitting");
                 console.log(deck.getDeck().length);
                 console.log(player.normalScore(), player.aceScore(), player.readCard());
                 console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
-                dealer_score = dealer.normalScore();
+                // Update dealer score
+                // dealer_score = dealer.normalScore();
 
+                // While dealer is hitting. If dealer got five cards and have not busted yet. Then stay and dealer win.
                 if(dealer.getHand().length == 5 && dealer.normalScore() < 22 || dealer.getHand().length == 5 && dealer.aceScore() < 22){
                     console.log("Dealer have 5 cards. Dealer Win");
                     c = "stop";
@@ -394,15 +407,31 @@ function Test() {
 
             }
 
-            if(dealer.normalScore() > 21 && dealer.aceScore() < 17 || dealer.aceScore() < player.aceScore() && player.normalScore() > dealer.normalScore() && dealer.aceScore() < 17) {
+            // After hitting. Update dealer score
+            dealer_score = dealer.normalScore();
+
+            // After hitting, check if dealer_score is bigger than player score without busting.
+            //if(dealer.normalScore() > player_score && dealer.normalScore() < 22){
+            if(dealer_score > player_score && dealer_score < 22){
+                console.log("00. Dealer stay. Dealer win.");
+                c = "stop";
+                t =false;
+                return;
+            }
+            // Else if dealer_score busted and have an Ace score less than 17. Then shuffle.
+            else if(dealer_score > 21 && dealer.aceScore() < 17) {
+
+                // Continue hitting while dealer's Ace score is less than player's Ace score and less than 17.
                 while (dealer.aceScore() < player.aceScore() && dealer.aceScore() < 17) {
                     dealer.hit();
                     console.log("Hitting on Ace");
                     console.log(deck.getDeck().length);
                     console.log(player.normalScore(), player.aceScore(), player.readCard());
                     console.log(dealer.normalScore(), dealer.aceScore(), dealer.readCard());
-                    dealer_score = dealer.aceScore();
 
+                    // dealer_score = dealer.aceScore();
+
+                    // Check if dealer hand have five cards and have not busted yet. Then exit and dealer Win.
                     if(dealer.getHand().length == 5 && dealer.normalScore() < 22 || dealer.getHand().length == 5 && dealer.aceScore() < 22){
                         console.log("Dealer have 5 cards. Dealer Win");
                         c = "stop";
@@ -412,50 +441,50 @@ function Test() {
                 }
             }
 
+            // Update the best score to use for dealer_score.
             if(dealer.normalScore() < 22){
                 dealer_score = dealer.normalScore();
             }
-
-            if(dealer.aceScore() < 22 && dealer.normalScore() > 21){
+            else if(dealer.aceScore() < 22 && dealer.normalScore() > 21){
                 dealer_score = dealer.aceScore();
             }
 
             console.log("player:", player_score, "dealer:", dealer_score);
+
+            // Figuring out if dealer busted, won, and loses.
             if(dealer_score > 21){
                 console.log("Dealer bust")
                 return;
             }
 
-
-
+            // If dealer score is bigger than player and have not busted. Then dealer win.
             if(dealer_score > player_score && dealer_score < 22) {
                 console.log("dealer win");
                 c = "stop";
                 t = false;
                 return
             }
+            // Check if the dealer busted.
             else if(player_score < dealer_score && dealer > 22) {
-                console.log("dealer win because dealer is over 21 ");
+                console.log("dealer lose because dealer is over 21 ");
                 c = "stop";
                 t = false;
                 return
             }
+            // If player score is bigger than dealer and have not busted. Then player win.
             else if ( dealer_score < player_score && player_score < 22){
                 console.log("player win");
                 c = "stop";
                 t = false;
                 return
             }
-            else if (dealer_score === player_score){
+            // If both score are the same. Then it is a draw. House still win no mater what.
+            else if (dealer_score === player_score) {
                 console.log("Draw");
-                c ="stop";
+                c = "stop";
                 t = false;
                 return
             }
-
-            // Check if the dealer win or lose
-
-
         }
         else {
             t = false;
