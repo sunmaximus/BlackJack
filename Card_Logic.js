@@ -1,5 +1,7 @@
 /**
- * Created by Son on 2/28/2016.
+ * Created by Son Nguyen on 2/28/2016.
+ * Description: This script is an Alpha version  to create Card and Deck object. The Game function is the logic of the
+ *              game.
  */
 
 // constructor
