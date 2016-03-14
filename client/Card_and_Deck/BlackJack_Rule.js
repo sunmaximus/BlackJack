@@ -161,7 +161,7 @@ myApp.controller('BlackJackController', function($scope) {
                 $scope.dealer_reading["Status"] = check_if_dealer_won;
                 return;
             }
-            // If dealer have BlackJack and player doesn't. Player lose.
+            // Else dealer have BlackJack and player doesn't. Player lose.
             else{
                 check_if_dealer_won = "Yes Dealer Won the Game";
                 check_if_player_won = "No Player Lost the Game";
