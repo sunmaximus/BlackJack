@@ -24,8 +24,8 @@
       <file leaf-file-name="BlackJack.component.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/Card_and_Deck/BlackJack.component.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="13.115591">
-              <caret line="287" column="0" selection-start-line="287" selection-start-column="0" selection-end-line="287" selection-end-column="0" />
+            <state vertical-scroll-proportion="1.4623656">
+              <caret line="53" column="25" selection-start-line="53" selection-start-column="25" selection-end-line="53" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -79,8 +79,8 @@
         <option value="$PROJECT_DIR$/client/Card_and_Deck/card_class.js" />
         <option value="$PROJECT_DIR$/client/Card_and_Deck/Card_Logic.js" />
         <option value="$PROJECT_DIR$/client/Card_and_Deck/card_deck_hand.js" />
-        <option value="$PROJECT_DIR$/client/Card_and_Deck/BlackJack.component.js" />
         <option value="$PROJECT_DIR$/client/Cards.html" />
+        <option value="$PROJECT_DIR$/client/Card_and_Deck/BlackJack.component.js" />
       </list>
     </option>
   </component>
@@ -767,8 +767,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/Card_and_Deck/BlackJack.component.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="13.115591">
-          <caret line="287" column="0" selection-start-line="287" selection-start-column="0" selection-end-line="287" selection-end-column="0" />
+        <state vertical-scroll-proportion="1.4623656">
+          <caret line="53" column="25" selection-start-line="53" selection-start-column="25" selection-end-line="53" selection-end-column="25" />
           <folding />
         </state>
       </provider>
