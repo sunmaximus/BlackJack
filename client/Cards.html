@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Narrow Jumbotron Template for Bootstrap</title>
+    <title>BlackJack</title>
 
     <!-- jQuery -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
@@ -26,9 +26,8 @@
     <script type="text/javascript" src="lib/angular_v1/angular.min.js"></script>
 
     <!-- My own javascript -->
-    <script type="text/javascript" src="Card_and_Deck/BlackJack.component.js"></script>
+    <script type="text/javascript" src="Card_and_Deck/BlackJack_Rule.js"></script>
     <script type="text/javascript" src="Card_and_Deck/card_deck_hand.js"></script>
-
 </head>
 
 <body>
@@ -40,16 +39,17 @@
             <h3 class="text-muted">BlackJack</h3>
         </div>
 
+        <span>Player: </span>
         <div class="row">
             <div ng-repeat="svgFile in player_reading.Cards">
-                <div class="col-md-2"><img src="Card/{{svgFile.svg}}" style="width:100px;height:150px;"></div>
+                <div class="col-md-1" style="width:110px;height:150px;"><img src="Card/{{svgFile.svg}}" style="width:100px;height:150px;"></div>
             </div>
-
         </div>
 
+        <span>Dealer: </span>
         <div class="row">
             <div ng-repeat="svgFile in dealer_reading.Cards">
-                <div class="col-md-2"><img src="Card/{{svgFile.svg}}" style="width:100px;height:150px;"></div>
+                <div class="col-md-1" style="width:110px;height:150px;"><img src="Card/{{svgFile.svg}}" style="width:100px;height:150px;"></div>
             </div>
 
         </div>
@@ -62,7 +62,7 @@
         <button class="btn btn-lg btn-success" ng-click="stand()">Stand</button>
 
         <footer class="footer">
-            <p>&copy; 2016 Company, Inc.</p>
+            <p>&copy; 2016 Son Nguyen, Inc.</p>
         </footer>
 
     </div> <!-- /container -->

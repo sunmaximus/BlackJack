@@ -1,12 +1,13 @@
 /**
  * Created by Son on 3/12/2016.
+ * Description: This an Angular Script that control the rule of BlackJack.
  */
 
-    // CHeck the BlackJack RULE AGAIN
 var myApp = angular.module('BlackJack',[]);
 
 myApp.controller('BlackJackController', function($scope) {
 
+    /* Initialize player, dealer, deck, score, and winning status*/
     var player, dealer;
     var deck = new Deck(8);
     deck.shuffle(9);
@@ -16,8 +17,11 @@ myApp.controller('BlackJackController', function($scope) {
 
     var check_if_player_won = "Unavailable";
     var check_if_dealer_won = "Unavailable";
+    /* This variable will be use to keep track if player chose to stand to prevent hitting for new card */
     var player_chose_to_stand = "no";
 
+    /* Initialize json object for controller to read. It will be use to displace score, number of cards on hand, and
+       winning status for both players. */
     $scope.player_reading = {
         score: player_score,
         handLength: 0,
@@ -32,22 +36,7 @@ myApp.controller('BlackJackController', function($scope) {
         Status: check_if_dealer_won
     };
 
-    // Private Function
-    // This function check if the first two cards of the initial hand have a black Jack
-    // returns (boolean)
-    var checkBlackJack = function(_player){
-        var BlackJack = false;
-
-        if(_player.getHand()[0].symbol == "Ace" && _player.getHand()[1].value == 10){
-            BlackJack = true;
-        }
-        else if( _player.getHand()[1].symbol == "Ace" && _player.getHand()[0].symbol == 10) {
-            BlackJack = true;
-        }
-
-        return BlackJack;
-    };
-
+    /* Every time newGame() is called on click. Re-initialize all variable to it default value, create 2 new hands, and add 2 new cards to hand*/
     $scope.newGame = function() {
 
         player_score = 0;
@@ -74,7 +63,7 @@ myApp.controller('BlackJackController', function($scope) {
         $scope.dealer_reading['Cards'] = [dealer.getHand()[0], {svg:'Card_back.svg'},
                                           {svg:'Card_back.svg'}, {svg:'Card_back.svg'},{svg:'Card_back.svg'}];
 
-        // Check if player initial hand is BlackJack. Stop.
+        // Check if player initial hand is BlackJack. Stop and prevent player from hitting.
         if (player.normalScore() == 21){
             check_if_player_won = "Player got BlackJack";
             player_score = player.normalScore();
@@ -82,6 +71,7 @@ myApp.controller('BlackJackController', function($scope) {
             player_score = player.aceScore();
         }
 
+        /* Het the sum of two cards for player. However, for player retrieve only the value of the first card*/
         $scope.player_reading["score"] = player_score;
         $scope.dealer_reading["score"] = dealer.getHand()[0].value;
 
@@ -89,7 +79,10 @@ myApp.controller('BlackJackController', function($scope) {
 
     $scope.hitMe = function() {
 
+        // This variable will be use to keep track of the index of the newly added card into the hand.
         var index_of_new_card_on_hand = 0;
+
+        // if any of these are true, prevent the hitMe() button to run.
         if(check_if_player_won === "Yes Player Won the Game" || check_if_player_won === "No Player Lost the Game"||
            check_if_player_won === "Player got BlackJack" || typeof player == typeof undefined  ||
             player_chose_to_stand === "yes" || check_if_player_won == "No Player and Dealer are Tie"){
@@ -98,8 +91,10 @@ myApp.controller('BlackJackController', function($scope) {
 
         player.hit();
 
+        /* Simple math. Array.length - 1 = "index of the last element of the array" */
         index_of_new_card_on_hand = player.getHand().length - 1
 
+        /* Assign the best value for player_score */
         if(player.normalScore() > 21 && player.aceScore() < 22){
             console.log("3");
             player_score = player.aceScore();
@@ -111,6 +106,7 @@ myApp.controller('BlackJackController', function($scope) {
         }
         $scope.player_reading["score"] = player_score;
         $scope.player_reading['handLength'] = (player.getHand()).length;
+        /* player_reading['Cards'] & player.getHand() return a list. Add new element into the list every time player hit. */
         $scope.player_reading['Cards'][ index_of_new_card_on_hand] = player.getHand()[index_of_new_card_on_hand];
 
         // Check if player win by having 5 cards and never bust.
@@ -134,29 +130,30 @@ myApp.controller('BlackJackController', function($scope) {
    };
 
     $scope.stand = function(){
+        // This variable will be use to keep track of the index of the newly added card into the hand.
         var index_of_new_card_on_hand = 0;
+        // prevent player from hitting when player on click stand().
         player_chose_to_stand = "yes";
 
+        // If any of these are true, prevent stand() button to run.
         if(check_if_dealer_won == "No Player and Dealer are Tie" || check_if_dealer_won == "Yes Dealer Won the Game"||
            check_if_dealer_won == "No Dealer Lost the Game" || check_if_player_won === "Yes Player Won the Game" ||
            check_if_player_won === "No Player Lost the Game" || typeof dealer == typeof undefined){
            return;
         }
 
+        // Assign default value for dealer score.
         dealer_score = dealer.normalScore();
         $scope.dealer_reading["score"] = dealer_score;
+        // This will help to display dealer initial two card when on click stand().
         $scope.dealer_reading['Cards'][0] = dealer.getHand()[0];
         $scope.dealer_reading['Cards'][1] = dealer.getHand()[1];
 
         // If dealer score is 21 at start.
-        if(dealer.normalScore() == 21){
-            console.log("Dealer Have ------ Black Jack ------");
-            console.log("Dealer Stay because it is 21");
+        if(dealer_score == 21){
 
-            // If dealer score without ace is bigger than player OR bigger than player with an ace.
-            // Then exit and dealer win.
-
-            if(dealer.normalScore() == player.normalScore() && check_if_player_won === "Player got BlackJack"){
+            // Calculate if both dealer and player have BlackJack. Else if not then player lose.
+            if(dealer.normalScore() == player_score && check_if_player_won === "Player got BlackJack"){
                 console.log("1. Dealer and Player have the same score for BlackJack");
                 check_if_player_won = "No Player and Dealer are Tie";
                 check_if_dealer_won = "No Player and Dealer are Tie";
@@ -164,15 +161,16 @@ myApp.controller('BlackJackController', function($scope) {
                 $scope.dealer_reading["Status"] = check_if_dealer_won;
                 return;
             }
-            else if (dealer.normalScore() == player.normalScore() && check_if_player_won != "Player got BlackJack"){
+            // If dealer have BlackJack and player doesn't. Player lose.
+            else if (dealer_score == player_score && check_if_player_won != "Player got BlackJack"){
                 check_if_dealer_won = "Yes Dealer Won the Game";
                 check_if_player_won = "No Player Lost the Game";
                 $scope.player_reading["Status"] = check_if_player_won;
                 $scope.dealer_reading["Status"] = check_if_dealer_won;
             }
-
-
-        }else if (checkBlackJack(player) && dealer_score != 21 ){
+        }
+        // If player have BlackJack and dealer doesn't. Dealer lose.
+        else if (check_if_player_won === "Player got BlackJack" && dealer_score < 22){
             console.log("Dealer lost because player have a BlackJack and dealer doesn't.")
             check_if_dealer_won = "No Dealer Lost the Game";
             check_if_player_won = "Yes Player Won the Game";
@@ -181,8 +179,8 @@ myApp.controller('BlackJackController', function($scope) {
             return;
         }
 
-        // Check if dealer and player score are the same. Stay because House will win.
-        if(dealer.normalScore() == player.normalScore() && dealer.normalScore() > 17){
+        // Check if dealer and player score are the same. Dealer stand.
+        if(dealer_score == player_score && dealer_score > 17){
             console.log("Dealer Stay because it is tie");
             check_if_player_won = "No Player and Dealer are Tie";
             check_if_dealer_won = "No Player and Dealer are Tie";
@@ -190,8 +188,8 @@ myApp.controller('BlackJackController', function($scope) {
             $scope.dealer_reading["Status"] = check_if_dealer_won;
             return;
         }
-        // Stay if Dealer's score without an ace is bigger than Player's score and haven't busted yet.
-        else if(dealer.normalScore() > player.normalScore() && dealer.normalScore() < 22){
+        // Stand if Dealer's score without an ace is bigger than Player's score and haven't busted yet.
+        else if(dealer_score > player_score && dealer_score < 22){
             console.log("Dealer Stay because dealer score is higher than player");
             check_if_dealer_won = "Yes Dealer Won the Game";
             check_if_player_won = "No Player Lost the Game";
@@ -201,7 +199,7 @@ myApp.controller('BlackJackController', function($scope) {
         }
 
         // Check if the dealer should hit or not while not having an Ace.
-        while (dealer.normalScore() < player.normalScore() && dealer.normalScore() < 17){
+        while (dealer_score < player_score && dealer_score < 17){
             dealer.hit();
             index_of_new_card_on_hand = dealer.getHand().length - 1;
             dealer_score = dealer.normalScore()
@@ -235,8 +233,8 @@ myApp.controller('BlackJackController', function($scope) {
         // Else if dealer_score busted and have an Ace score less than 17. Then continue to hit.
         else if(dealer_score > 21 && dealer.aceScore() < 17) {
 
-            // Continue hitting while dealer's Ace score is less than player's Ace score and less than 17.
-            while (dealer.aceScore() < player.aceScore() && dealer.aceScore() < 17) {
+            // Continue hitting while dealer's Ace score is less than player_score and less than 17.
+            while (dealer.aceScore() < player_score && dealer.aceScore() < 17) {
 
                 dealer.hit();
                 index_of_new_card_on_hand = dealer.getHand().length - 1;
@@ -258,17 +256,16 @@ myApp.controller('BlackJackController', function($scope) {
             }
         }
 
-
         // Update the best score to use for dealer_score.
-        if(dealer.normalScore() < 22){
-            dealer_score = dealer.normalScore();
-        }
-        else if(dealer.aceScore() < 22 && dealer.normalScore() > 21){
+        if(dealer.aceScore() < 22 && dealer.normalScore() > 21){
+            dealer_score = dealer.aceScore();
+        }else if(dealer.normalScore() > 21){
             dealer_score = dealer.aceScore();
         }else{
             dealer_score = dealer.normalScore();
         }
 
+        // Update dealer score and number cards to the view.
         $scope.dealer_reading["score"] = dealer_score;
         $scope.dealer_reading['handLength'] = (dealer.getHand()).length;
         console.log("player:", player_score, "dealer:", dealer_score);
