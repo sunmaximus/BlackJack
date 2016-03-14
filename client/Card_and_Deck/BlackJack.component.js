@@ -155,24 +155,16 @@ myApp.controller('BlackJackController', function($scope) {
 
             // If dealer score without ace is bigger than player OR bigger than player with an ace.
             // Then exit and dealer win.
-            if(dealer.normalScore() > player.normalScore() || dealer.normalScore() > player.aceScore()){
-                console.log("0. Dealer win");
-                check_if_dealer_won = "Yes Dealer Won the Game";
-                check_if_player_won = "No Player Lost the Game";
-                $scope.player_reading["Status"] = check_if_player_won;
-                $scope.dealer_reading["Status"] = check_if_dealer_won;
-                return;
-            }
-            // If both are equal then it is a tie. House still win automatically.
-            else if(dealer.normalScore() == player.normalScore() && checkBlackJack(dealer) && checkBlackJack(player)){
-                console.log("1. Dealer and Player have the same score");
+
+            if(dealer.normalScore() == player.normalScore() && check_if_player_won === "Player got BlackJack"){
+                console.log("1. Dealer and Player have the same score for BlackJack");
                 check_if_player_won = "No Player and Dealer are Tie";
                 check_if_dealer_won = "No Player and Dealer are Tie";
                 $scope.player_reading["Status"] = check_if_player_won;
                 $scope.dealer_reading["Status"] = check_if_dealer_won;
                 return;
             }
-            else if (dealer.normalScore() == player.normalScore() && checkBlackJack(player) === false){
+            else if (dealer.normalScore() == player.normalScore() && check_if_player_won != "Player got BlackJack"){
                 check_if_dealer_won = "Yes Dealer Won the Game";
                 check_if_player_won = "No Player Lost the Game";
                 $scope.player_reading["Status"] = check_if_player_won;
