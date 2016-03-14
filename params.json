@@ -1,7 +1,7 @@
 {
   "name": "Blackjack",
   "tagline": "BlackJack/client/index.html",
-  "body": "# Simple BlackJack Game.\r\n* Go to this to play the game: http://sunmaximus.github.io/BlackJack/client/index.html\r\n\r\n# Framework Uses.\r\n* AngularJs: v1.5.0\r\n* jQuery:    v1.12.1\r\n* Boostrap   v3.3.6",
+  "body": "# Simple BlackJack Game.\r\n* Go to this link to play the game: http://sunmaximus.github.io/BlackJack/client/index.html\r\n\r\n# Framework Uses.\r\n* AngularJs: v1.5.0\r\n* jQuery:    v1.12.1\r\n* Boostrap   v3.3.6",
   "google": "",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
