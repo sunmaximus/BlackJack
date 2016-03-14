@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Narrow Jumbotron Template for Bootstrap</title>
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.1.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- Angular js -->
+    <script type="text/javascript" src="lib/angular_v1/angular.min.js"></script>
+
+    <!-- My own javascript -->
+    <script type="text/javascript" src="Card_and_Deck/BlackJack.component.js"></script>
+    <script type="text/javascript" src="Card_and_Deck/card_deck_hand.js"></script>
+
+</head>
+
+<body>
+
+<div>
+
+    <div class="container" ng-app="BlackJack" ng-controller="BlackJackController">
+        <div class="header clearfix">
+            <h3 class="text-muted">BlackJack</h3>
+        </div>
+
+        <div class="row">
+            <div ng-repeat="svgFile in player_reading.Cards">
+                <div class="col-md-2"><img src="Card/{{svgFile.svg}}" style="width:100px;height:150px;"></div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div ng-repeat="svgFile in dealer_reading.Cards">
+                <div class="col-md-2"><img src="Card/{{svgFile.svg}}" style="width:100px;height:150px;"></div>
+            </div>
+
+        </div>
+
+        <p>Player -- Score: {{player_reading.score}}, Cards on Hand: {{player_reading.handLength}}, Player Winning Status: {{player_reading.Status}}</p>
+        <p>Dealer -- Score: {{dealer_reading.score}}, Cards on Hand: {{dealer_reading.handLength}}, Dealer Winning Status: {{dealer_reading.Status}}</p>
+
+        <button class="btn btn-lg btn-success" ng-click="newGame()">New Game</button>
+        <button class="btn btn-lg btn-success" ng-click="hitMe()">Hit Me</button>
+        <button class="btn btn-lg btn-success" ng-click="stand()">Stand</button>
+
+        <footer class="footer">
+            <p>&copy; 2016 Company, Inc.</p>
+        </footer>
+
+    </div> <!-- /container -->
+</div>
+</body>
+</html>
